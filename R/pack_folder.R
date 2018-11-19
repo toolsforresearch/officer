@@ -42,19 +42,13 @@ pack_folder <- function( folder, target ){
   setwd(folder)
   if( .Platform$OS.type %in% "windows")
     target <- enc2native(target)
-  tryCatch(
-    zip::zip(zipfile = target,
-        files = list.files(all.files = TRUE, recursive = TRUE))
-    , error = function(e) {
-      stop("Could not write ", shQuote(target), " [", e$message, "]")
-    }
-    , finally = {
-      setwd(curr_wd)
-    })
+# zip -FSr target *
+  zipCmd = paste('zip -FSr ', target, ' *', sep='')
+  system(zipCmd)
+  setwd(curr_wd)
 
   target
 }
-
 #' @export
 #' @importFrom utils unzip
 #' @title Extract files from a zip file
